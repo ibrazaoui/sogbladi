@@ -1,618 +1,544 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-  <title>
-   متجر بيع الأشياء المستعملة
-  </title>
-  <link id="app-manifest" rel="manifest"/>
-  <meta content="#2e7d32" name="theme-color"/>
-  <meta content="بيع، شراء، مستعمل، الجزائر، سوق بلادي، منتجات، إلكترونيات، أثاث، سيارات" name="keywords"/>
-  <link href="https://sogbladi.github.io/my-usedstore/" rel="canonical"/>
-  <meta content="سوق بلادي - بيع وشراء الأشياء المستعملة في الجزائر" name="description"/>
-  <link href="styles.css" rel="stylesheet"/>
- </head>
- <body>
-  <!-- Login Page -->
-  <div class="container" id="login-page">
-   <div class="auth-brand">
-    <h1 class="animated-logo">
-     سوق بلادي
-    </h1>
-    <p class="brand-tagline">
-     مع سوق بلادي تقدر تبيع وتشري كل شيء مستعمل
-    </p>
-   </div>
-   <div class="form-container">
-    <div class="form-group">
-     <label for="login-email">
-      البريد الإلكتروني
-     </label>
-     <input autocomplete="username" id="login-email" placeholder="البريد الإلكتروني" type="email"/>
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>متجر بيع الأشياء المستعملة</title>
+    <link id="app-manifest" rel="manifest"/>
+    <meta content="#2e7d32" name="theme-color"/>
+    <meta content="بيع، شراء، مستعمل، الجزائر، سوق بلادي، منتجات، إلكترونيات، أثاث، سيارات" name="keywords"/>
+    <link href="https://sogbladi.github.io/my-usedstore/" rel="canonical"/>
+    <meta content="سوق بلادي - بيع وشراء الأشياء المستعملة في الجزائر" name="description"/>
+    <link href="styles.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Lateef:wght@700&family=Tajawal:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="container" id="login-page">
+        <div class="auth-brand">
+            <h1 class="animated-logo">سوق بلادي</h1>
+            <p class="brand-tagline">مع سوق بلادي تقدر تبيع وتشري كل شيء مستعمل</p>
+        </div>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="login-email">البريد الإلكتروني</label>
+                <input autocomplete="username" id="login-email" placeholder="البريد الإلكتروني" type="email" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">كلمة المرور</label>
+                <input autocomplete="current-password" id="login-password" placeholder="كلمة المرور" type="password" required>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary" id="login-btn">
+                    <span>تسجيل الدخول</span>
+                </button>
+                <button class="btn btn-secondary" id="register-btn">
+                    <span>إنشاء حساب</span>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-     <label for="login-password">
-      كلمة المرور
-     </label>
-     <input autocomplete="current-password" id="login-password" placeholder="كلمة المرور" type="password"/>
+
+    <!-- OTP Verification Page -->
+    <div class="container" id="otp-page" style="display: none;">
+        <div class="form-container">
+            <h1 class="form-title">التحقق من البريد الإلكتروني</h1>
+            <p style="text-align: center; margin-bottom: 15px; font-size: 0.9rem;">
+                لقد أرسلنا كود التحقق المكون من 6 أرقام إلى بريدك الإلكتروني
+            </p>
+            <div class="form-group">
+                <label for="otp-code">كود التحقق</label>
+                <div class="verification-code">
+                    <input autocomplete="one-time-code" id="otp1" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text" required>
+                    <input id="otp2" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text" required>
+                    <input id="otp3" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text" required>
+                    <input id="otp4" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text" required>
+                    <input id="otp5" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text" required>
+                    <input id="otp6" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text" required>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="back-to-login">
+                    <span>رجوع</span>
+                </button>
+                <button class="btn btn-primary" id="verify-otp">
+                    <span>تحقق</span>
+                </button>
+            </div>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.8rem;">
+                لم تستلم الكود؟
+                <a href="#" id="resend-otp" style="color: var(--secondary-color);">إعادة إرسال</a>
+            </p>
+        </div>
     </div>
-    <div class="form-actions">
-     <button class="btn btn-primary" id="login-btn">
-      تسجيل الدخول
-     </button>
-     <button class="btn btn-secondary" id="register-btn">
-      إنشاء حساب
-     </button>
+
+    <!-- Reset Password Page -->
+    <div class="container" id="reset-password-page" style="display: none;">
+        <div class="form-container">
+            <h1 class="form-title">إعادة تعيين كلمة المرور</h1>
+            <div class="form-group">
+                <label for="new-password">كلمة المرور الجديدة</label>
+                <input autocomplete="new-password" id="new-password" placeholder="كلمة المرور الجديدة" type="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-new-password">تأكيد كلمة المرور الجديدة</label>
+                <input autocomplete="new-password" id="confirm-new-password" placeholder="تأكيد كلمة المرور الجديدة" type="password" required>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="cancel-reset-password">
+                    <span>إلغاء</span>
+                </button>
+                <button class="btn btn-primary" id="submit-reset-password">
+                    <span>تحديث كلمة المرور</span>
+                </button>
+            </div>
+        </div>
     </div>
-    
-   </div>
-  </div>
-  <!-- OTP Verification Page -->
-  <div class="container" id="otp-page" style="display: none;">
-   <div class="form-container">
-    <h1 class="form-title">
-     التحقق من البريد الإلكتروني
-    </h1>
-    <p style="text-align: center; margin-bottom: 15px; font-size: 0.9rem;">
-     لقد أرسلنا كود التحقق المكون من 6 أرقام إلى بريدك الإلكتروني
-    </p>
-    <div class="form-group">
-     <label for="otp-code">
-      كود التحقق
-     </label>
-     <div class="verification-code">
-      <input autocomplete="one-time-code" id="otp1" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
-      <input id="otp2" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
-      <input id="otp3" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
-      <input id="otp4" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
-      <input id="otp5" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
-      <input id="otp6" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
-     </div>
+
+    <!-- Register Page -->
+    <div class="container" id="register-page" style="display: none;">
+        <div class="form-container">
+            <h1 class="form-title">إنشاء حساب جديد</h1>
+            <div class="form-group">
+                <label for="full-name">الاسم الكامل</label>
+                <input autocomplete="name" id="full-name" placeholder="الاسم الكامل" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني</label>
+                <input autocomplete="email" id="email" placeholder="البريد الإلكتروني" type="email" required>
+            </div>
+            <div class="form-group">
+                <label for="age">العمر</label>
+                <input id="age" max="100" min="16" placeholder="العمر" type="number" required>
+            </div>
+            <div class="form-group">
+                <label for="wilaya">الولاية</label>
+                <select id="wilaya" required>
+                    <option value="">اختر الولاية</option>
+                    <option value="أدرار">أدرار</option>
+                    <option value="الشلف">الشلف</option>
+                    <option value="الأغواط">الأغواط</option>
+                    <option value="أم البواقي">أم البواقي</option>
+                    <option value="باتنة">باتنة</option>
+                    <option value="بجاية">بجاية</option>
+                    <option value="بسكرة">بسكرة</option>
+                    <option value="بشار">بشار</option>
+                    <option value="البليدة">البليدة</option>
+                    <option value="البويرة">البويرة</option>
+                    <option value="تمنراست">تمنراست</option>
+                    <option value="تبسة">تبسة</option>
+                    <option value="تلمسان">تلمسان</option>
+                    <option value="تيارت">تيارت</option>
+                    <option value="تيزي وزو">تيزي وزو</option>
+                    <option value="الجزائر">الجزائر</option>
+                    <option value="الجلفة">الجلفة</option>
+                    <option value="جيجل">جيجل</option>
+                    <option value="سطيف">سطيف</option>
+                    <option value="سعيدة">سعيدة</option>
+                    <option value="سكيكدة">سكيكدة</option>
+                    <option value="سيدي بلعباس">سيدي بلعباس</option>
+                    <option value="عنابة">عنابة</option>
+                    <option value="قالمة">قالمة</option>
+                    <option value="قسنطينة">قسنطينة</option>
+                    <option value="المدية">المدية</option>
+                    <option value="مستغانم">مستغانم</option>
+                    <option value="المسيلة">المسيلة</option>
+                    <option value="معسكر">معسكر</option>
+                    <option value="ورقلة">ورقلة</option>
+                    <option value="وهران">وهران</option>
+                    <option value="البيض">البيض</option>
+                    <option value="إليزي">إليزي</option>
+                    <option value="برج بوعريريج">برج بوعريريج</option>
+                    <option value="بومرداس">بومرداس</option>
+                    <option value="الطارف">الطارف</option>
+                    <option value="تندوف">تندوف</option>
+                    <option value="تيسمسيلت">تيسمسيلت</option>
+                    <option value="الوادي">الوادي</option>
+                    <option value="خنشلة">خنشلة</option>
+                    <option value="سوق أهراس">سوق أهراس</option>
+                    <option value="تيبازة">تيبازة</option>
+                    <option value="ميلة">ميلة</option>
+                    <option value="عين الدفلى">عين الدفلى</option>
+                    <option value="النعامة">النعامة</option>
+                    <option value="عين تموشنت">عين تموشنت</option>
+                    <option value="غرداية">غرداية</option>
+                    <option value="غليزان">غليزان</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="register-phone">رقم الهاتف</label>
+                <div class="phone-input">
+                    <div class="phone-prefix">+213</div>
+                    <input class="phone-number" id="register-phone" inputmode="numeric" maxlength="9" minlength="9" pattern="[0-9]{9}" placeholder="رقم الهاتف" type="tel" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">كلمة المرور</label>
+                <input autocomplete="new-password" id="password" placeholder="كلمة المرور" type="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">تأكيد كلمة المرور</label>
+                <input autocomplete="new-password" id="confirm-password" placeholder="تأكيد كلمة المرور" type="password" required>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="back-to-login-from-register">
+                    <span>رجوع</span>
+                </button>
+                <button class="btn btn-primary" id="complete-register">
+                    <span>إنشاء الحساب</span>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="form-actions">
-     <button class="btn btn-secondary" id="back-to-login">
-      رجوع
-     </button>
-     <button class="btn btn-primary" id="verify-otp">
-      تحقق
-     </button>
+
+    <!-- Main Store Page -->
+    <div id="store-page" style="display: none;">
+        <header>
+            <div class="container header-content">
+                <div class="logo">سوق بلادي</div>
+                <div class="header-buttons">
+                    <button aria-label="الإشعارات" id="notifications-btn">
+                        <span>الإشعارات</span>
+                        <span aria-live="polite" class="badge" id="notification-badge" style="display: none;">0</span>
+                    </button>
+                    <div class="profile-btn-container">
+                        <div aria-hidden="true" class="profile-pic" id="header-profile-pic"></div>
+                        <button id="profile-btn">
+                            <span>الملف الشخصي</span>
+                        </button>
+                    </div>
+                    <button class="logout" id="logout-btn">
+                        <span>تسجيل الخروج</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <div class="container">
+            <div aria-live="polite" class="welcome-message" id="welcome-message" style="display: none;">
+                * مرحبا بك في متجرك *
+                <br/>
+                بيع الأشياء المستعملة في الجزائر
+            </div>
+            <div class="search-container">
+                <input aria-label="بحث عن منتج" class="search-input" id="search-input" placeholder="ابحث عن منتج..." type="text">
+                <button class="search-btn" id="search-btn">بحث</button>
+                <select aria-label="تصنيف المنتج" class="search-input" id="search-category">
+                    <option value="">كل الفئات</option>
+                    <option value="ملابس">ملابس</option>
+                    <option value="أجهزة إلكترونية">أجهزة إلكترونية</option>
+                    <option value="أثاث">أثاث</option>
+                    <option value="كتب">كتب</option>
+                    <option value="أدوات منزلية">أدوات منزلية</option>
+                    <option value="أخرى">أخرى</option>
+                </select>
+            </div>
+            <div class="products-grid" id="products-container" role="list">
+                <!-- المنتجات ستظهر هنا -->
+            </div>
+        </div>
     </div>
-    <p style="text-align: center; margin-top: 15px; font-size: 0.8rem;">
-     لم تستلم الكود؟
-     <a href="#" id="resend-otp" style="color: var(--secondary-color);">
-      إعادة إرسال
-     </a>
-    </p>
-   </div>
-  </div>
-  <!-- Reset Password Page -->
-  <div class="container" id="reset-password-page" style="display: none;">
-   <div class="form-container">
-    <h1 class="form-title">
-     إعادة تعيين كلمة المرور
-    </h1>
-    <div class="form-group">
-     <label for="new-password">
-      كلمة المرور الجديدة
-     </label>
-     <input autocomplete="new-password" id="new-password" placeholder="كلمة المرور الجديدة" type="password"/>
+
+    <!-- Profile Page -->
+    <div id="profile-page" style="display: none;">
+        <header>
+            <div class="container header-content">
+                <div class="logo">الملف الشخصي</div>
+                <div class="header-buttons">
+                    <button class="btn-secondary" id="back-to-store-from-profile">
+                        <span>العودة للمتجر</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <div class="container">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div aria-label="صورة الملف الشخصي" class="profile-pic-large" id="profile-picture"></div>
+                    <div class="profile-info">
+                        <div class="profile-name" id="profile-full-name">الاسم الكامل</div>
+                        <div class="profile-email" id="profile-email">البريد الإلكتروني</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="detail-row">
+                        <span class="detail-label">العمر:</span>
+                        <span class="detail-value" id="profile-age">30</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">الولاية:</span>
+                        <span class="detail-value" id="profile-wilaya">الجزائر</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">رقم الهاتف:</span>
+                        <span class="detail-value" id="profile-phone">+213123456789</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-secondary" id="change-profile-pic">
+                        <span>تغيير الصورة</span>
+                    </button>
+                    <button class="btn btn-secondary" id="edit-profile">
+                        <span>تعديل الملف</span>
+                    </button>
+                    <button class="btn btn-primary" id="add-product">
+                        <span>إضافة منتج</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-     <label for="confirm-new-password">
-      تأكيد كلمة المرور الجديدة
-     </label>
-     <input autocomplete="new-password" id="confirm-new-password" placeholder="تأكيد كلمة المرور الجديدة" type="password"/>
+
+    <!-- Add Product Page -->
+    <div id="add-product-page" style="display: none;">
+        <header>
+            <div class="container header-content">
+                <div class="logo">إضافة منتج جديد</div>
+                <div class="header-buttons">
+                    <button class="btn-secondary" id="back-to-profile">
+                        <span>العودة للملف</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <div class="container">
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="product-name">اسم المنتج</label>
+                    <input id="product-name" placeholder="اسم المنتج" required type="text">
+                </div>
+                <div class="form-group">
+                    <label for="product-price">السعر (دج)</label>
+                    <input id="product-price" min="0" placeholder="السعر بالدينار الجزائري" required type="number">
+                </div>
+                <div class="form-group">
+                    <label for="product-category">نوع المنتج</label>
+                    <select id="product-category" required>
+                        <option value="">اختر النوع</option>
+                        <option value="ملابس">ملابس</option>
+                        <option value="أجهزة إلكترونية">أجهزة إلكترونية</option>
+                        <option value="أثاث">أثاث</option>
+                        <option value="كتب">كتب</option>
+                        <option value="أدوات منزلية">أدوات منزلية</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="product-condition">حالة المنتج</label>
+                    <select id="product-condition" required>
+                        <option value="">اختر الحالة</option>
+                        <option value="جديد">جديد</option>
+                        <option value="ممتاز">ممتاز</option>
+                        <option value="جيد">جيد</option>
+                        <option value="متوسط">متوسط</option>
+                        <option value="سيء">سيء</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="product-description">وصف المنتج</label>
+                    <textarea id="product-description" placeholder="وصف مفصل عن المنتج" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="product-phone">رقم الهاتف</label>
+                    <div class="phone-input">
+                        <div class="phone-prefix">+213</div>
+                        <input class="phone-number" id="product-phone" inputmode="numeric" maxlength="9" minlength="9" pattern="[0-9]{9}" placeholder="رقم الهاتف" required type="tel">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>صور المنتج (1-4 صور)</label>
+                    <div class="image-upload">
+                        <input accept="image/*" id="product-image-input" multiple style="display: none;" type="file" required>
+                        <button class="btn btn-secondary" id="upload-images-btn" type="button">
+                            <span>اختر الصور</span>
+                        </button>
+                        <p style="margin-top: 8px; font-size: 0.8rem; color: var(--light-text);">
+                            يمكنك رفع ما يصل إلى 4 صور
+                        </p>
+                        <div class="image-preview" id="image-preview"></div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" id="cancel-add-product">
+                        <span>إلغاء</span>
+                    </button>
+                    <button class="btn btn-primary" id="publish-product">
+                        <span>نشر المنتج</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-actions">
-     <button class="btn btn-secondary" id="cancel-reset-password">
-      إلغاء
-     </button>
-     <button class="btn btn-primary" id="submit-reset-password">
-      تحديث كلمة المرور
-     </button>
+
+    <!-- Modals -->
+    <div aria-labelledby="delete-modal-title" aria-modal="true" class="modal" id="delete-product-modal" role="dialog">
+        <div class="modal-content">
+            <h2 id="delete-modal-title">تأكيد حذف المنتج</h2>
+            <p>هل أنت متأكد أنك تريد حذف هذا المنتج؟ هذا الإجراء لا يمكن التراجع عنه.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancel-delete-product">
+                    <span>إلغاء</span>
+                </button>
+                <button class="btn btn-danger" id="confirm-delete-product">
+                    <span>حذف المنتج</span>
+                </button>
+            </div>
+        </div>
     </div>
-   </div>
-  </div>
-  <!-- Register Page -->
-  <div class="container" id="register-page" style="display: none;">
-   <div class="form-container">
-    <h1 class="form-title">
-     إنشاء حساب جديد
-    </h1>
-    <div class="form-group">
-     <label for="full-name">
-      الاسم الكامل
-     </label>
-     <input autocomplete="name" id="full-name" placeholder="الاسم الكامل" type="text"/>
+
+    <div aria-labelledby="logout-modal-title" aria-modal="true" class="modal" id="logout-modal" role="dialog">
+        <div class="modal-content">
+            <h2 id="logout-modal-title">تأكيد تسجيل الخروج</h2>
+            <p>هل أنت متأكد أنك تريد تسجيل الخروج؟</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancel-logout">
+                    <span>إلغاء</span>
+                </button>
+                <button class="btn btn-danger" id="confirm-logout">
+                    <span>تسجيل الخروج</span>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-     <label for="email">
-      البريد الإلكتروني
-     </label>
-     <input autocomplete="email" id="email" placeholder="البريد الإلكتروني" type="email"/>
+
+    <div aria-labelledby="edit-profile-title" aria-modal="true" class="modal" id="edit-profile-modal" role="dialog">
+        <div class="modal-content">
+            <h2 id="edit-profile-title">تعديل الملف الشخصي</h2>
+            <div class="form-group">
+                <label for="edit-full-name">الاسم الكامل</label>
+                <input id="edit-full-name" placeholder="الاسم الكامل" required type="text">
+            </div>
+            <div class="form-group">
+                <label for="edit-email">البريد الإلكتروني</label>
+                <input id="edit-email" placeholder="البريد الإلكتروني" required type="email">
+            </div>
+            <div class="form-group">
+                <label for="edit-age">العمر</label>
+                <input id="edit-age" max="100" min="16" placeholder="العمر" required type="number">
+            </div>
+            <div class="form-group">
+                <label for="edit-wilaya">الولاية</label>
+                <select id="edit-wilaya" required>
+                    <option value="">اختر الولاية</option>
+                    <option value="أدرار">أدرار</option>
+                    <option value="الشلف">الشلف</option>
+                    <option value="الأغواط">الأغواط</option>
+                    <option value="أم البواقي">أم البواقي</option>
+                    <option value="باتنة">باتنة</option>
+                    <option value="بجاية">بجاية</option>
+                    <option value="بسكرة">بسكرة</option>
+                    <option value="بشار">بشار</option>
+                    <option value="البليدة">البليدة</option>
+                    <option value="البويرة">البويرة</option>
+                    <option value="تمنراست">تمنراست</option>
+                    <option value="تبسة">تبسة</option>
+                    <option value="تلمسان">تلمسان</option>
+                    <option value="تيارت">تيارت</option>
+                    <option value="تيزي وزو">تيزي وزو</option>
+                    <option value="الجزائر">الجزائر</option>
+                    <option value="الجلفة">الجلفة</option>
+                    <option value="جيجل">جيجل</option>
+                    <option value="سطيف">سطيف</option>
+                    <option value="سعيدة">سعيدة</option>
+                    <option value="سكيكدة">سكيكدة</option>
+                    <option value="سيدي بلعباس">سيدي بلعباس</option>
+                    <option value="عنابة">عنابة</option>
+                    <option value="قالمة">قالمة</option>
+                    <option value="قسنطينة">قسنطينة</option>
+                    <option value="المدية">المدية</option>
+                    <option value="مستغانم">مستغانم</option>
+                    <option value="المسيلة">المسيلة</option>
+                    <option value="معسكر">معسكر</option>
+                    <option value="ورقلة">ورقلة</option>
+                    <option value="وهران">وهران</option>
+                    <option value="البيض">البيض</option>
+                    <option value="إليزي">إليزي</option>
+                    <option value="برج بوعريريج">برج بوعريريج</option>
+                    <option value="بومرداس">بومرداس</option>
+                    <option value="الطارف">الطارف</option>
+                    <option value="تندوف">تندوف</option>
+                    <option value="تيسمسيلت">تيسمسيلت</option>
+                    <option value="الوادي">الوادي</option>
+                    <option value="خنشلة">خنشلة</option>
+                    <option value="سوق أهراس">سوق أهراس</option>
+                    <option value="تيبازة">تيبازة</option>
+                    <option value="ميلة">ميلة</option>
+                    <option value="عين الدفلى">عين الدفلى</option>
+                    <option value="النعامة">النعامة</option>
+                    <option value="عين تموشنت">عين تموشنت</option>
+                    <option value="غرداية">غرداية</option>
+                    <option value="غليزان">غليزان</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="edit-phone">رقم الهاتف</label>
+                <div class="phone-input">
+                    <div class="phone-prefix">+213</div>
+                    <input class="phone-number" id="edit-phone" inputmode="numeric" maxlength="9" minlength="9" pattern="[0-9]{9}" placeholder="رقم الهاتف" required type="tel">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancel-edit-profile">
+                    <span>إلغاء</span>
+                </button>
+                <button class="btn btn-primary" id="save-profile">
+                    <span>حفظ التغييرات</span>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-     <label for="age">
-      العمر
-     </label>
-     <input id="age" max="100" min="16" placeholder="العمر" type="number"/>
+
+    <div aria-labelledby="change-pic-title" aria-modal="true" class="modal" id="change-pic-modal" role="dialog">
+        <div class="modal-content">
+            <h2 id="change-pic-title">تغيير صورة الملف الشخصي</h2>
+            <div class="image-upload">
+                <input accept="image/*" id="new-profile-pic" style="display: none;" type="file">
+                <button class="btn btn-secondary" id="upload-profile-pic-btn" type="button">
+                    <span>اختر صورة</span>
+                </button>
+                <div class="image-preview" id="profile-pic-preview"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancel-change-pic">
+                    <span>إلغاء</span>
+                </button>
+                <button class="btn btn-primary" id="confirm-change-pic">
+                    <span>حفظ الصورة</span>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-     <label for="wilaya">
-      الولاية
-     </label>
-     <select id="wilaya">
-      <option value="">
-       اختر الولاية
-      </option>
-      <option value="أدرار">
-       أدرار
-      </option>
-      <option value="الشلف">
-       الشلف
-      </option>
-      <!-- باقي الولايات -->
-     </select>
+
+    <div aria-modal="true" class="image-viewer-modal" id="image-viewer-modal" role="dialog">
+        <div class="image-viewer-content">
+            <button aria-label="إغلاق" class="image-viewer-close">×</button>
+            <img alt="" class="image-viewer-img" id="viewer-main-image" src="">
+            <div class="image-viewer-nav">
+                <button aria-label="الصورة السابقة" id="prev-image">&lt;</button>
+                <button aria-label="الصورة التالية" id="next-image">&gt;</button>
+            </div>
+            <div class="image-viewer-thumbnails" id="image-thumbnails"></div>
+        </div>
     </div>
-    <div class="form-group">
-     <label for="register-phone">
-      رقم الهاتف
-     </label>
-     <div class="phone-input">
-      <div class="phone-prefix">
-       +213
-      </div>
-      <input class="phone-number" id="register-phone" inputmode="numeric" maxlength="9" minlength="9" pattern="[0-9]{9}" placeholder="رقم الهاتف" type="tel"/>
-     </div>
+
+    <!-- Notification -->
+    <div aria-live="assertive" class="notification" id="notification" role="alert">
+        <span id="notification-message"></span>
     </div>
-    <div class="form-group">
-     <label for="password">
-      كلمة المرور
-     </label>
-     <input autocomplete="new-password" id="password" placeholder="كلمة المرور" type="password"/>
+
+    <!-- Notifications Panel -->
+    <div aria-label="قائمة الإشعارات" class="notifications-panel" id="notifications-panel" role="region">
+        <!-- الإشعارات ستظهر هنا -->
     </div>
-    <div class="form-group">
-     <label for="confirm-password">
-      تأكيد كلمة المرور
-     </label>
-     <input autocomplete="new-password" id="confirm-password" placeholder="تأكيد كلمة المرور" type="password"/>
-    </div>
-    <div class="form-actions">
-     <button class="btn btn-secondary" id="back-to-login-from-register">
-      رجوع
-     </button>
-     <button class="btn btn-primary" id="complete-register">
-      إنشاء الحساب
-     </button>
-    </div>
-   </div>
-  </div>
-  <!-- Main Store Page -->
-  <div id="store-page" style="display: none;">
-   <header>
-    <div class="container header-content">
-     <div class="logo">
-      سوق بلادي
-     </div>
-     <div class="header-buttons">
-      <button aria-label="الإشعارات" id="notifications-btn">
-       <span>
-        الإشعارات
-       </span>
-       <span aria-live="polite" class="badge" id="notification-badge">
-        0
-       </span>
-      </button>
-      <div class="profile-btn-container">
-       <div aria-hidden="true" class="profile-pic" id="header-profile-pic">
-       </div>
-       <button id="profile-btn">
-        <span>
-         الملف الشخصي
-        </span>
-       </button>
-      </div>
-      <button class="logout" id="logout-btn">
-       <span>
-        تسجيل الخروج
-       </span>
-      </button>
-     </div>
-    </div>
-   </header>
-   <div class="container">
-    <div aria-live="polite" class="welcome-message" id="welcome-message" style="display: none;">
-     * مرحبا بك في متجرك *
-     <br/>
-     بيع الأشياء المستعملة في الجزائر
-    </div>
-    <div class="search-container">
-     <input aria-label="بحث عن منتج" class="search-input" id="search-input" placeholder="ابحث عن منتج..." type="text"/>
-     <button class="search-btn" id="search-btn">
-      بحث
-     </button>
-     <select aria-label="تصنيف المنتج" class="search-input" id="search-category">
-      <option value="">
-       كل الفئات
-      </option>
-      <option value="ملابس">
-       ملابس
-      </option>
-      <option value="أجهزة إلكترونية">
-       أجهزة إلكترونية
-      </option>
-      <option value="أثاث">
-       أثاث
-      </option>
-      <option value="كتب">
-       كتب
-      </option>
-      <option value="أدوات منزلية">
-       أدوات منزلية
-      </option>
-      <option value="أخرى">
-       أخرى
-      </option>
-     </select>
-    </div>
-    <div class="products-grid" id="products-container" role="list">
-     <!-- المنتجات ستظهر هنا -->
-    </div>
-   </div>
-  </div>
-  <!-- Profile Page -->
-  <div id="profile-page" style="display: none;">
-   <header>
-    <div class="container header-content">
-     <div class="logo">
-      الملف الشخصي
-     </div>
-     <div class="header-buttons">
-      <button class="btn-secondary" id="back-to-store-from-profile">
-       <span>
-        العودة للمتجر
-       </span>
-      </button>
-     </div>
-    </div>
-   </header>
-   <div class="container">
-    <div class="profile-card">
-     <div class="profile-header">
-      <div aria-label="صورة الملف الشخصي" class="profile-pic-large" id="profile-picture">
-      </div>
-      <div class="profile-info">
-       <div class="profile-name" id="profile-full-name">
-        الاسم الكامل
-       </div>
-       <div class="profile-email" id="profile-email">
-        البريد الإلكتروني
-       </div>
-      </div>
-     </div>
-     <div class="profile-details">
-      <div class="detail-row">
-       <span class="detail-label">
-        العمر:
-       </span>
-       <span class="detail-value" id="profile-age">
-        30
-       </span>
-      </div>
-      <div class="detail-row">
-       <span class="detail-label">
-        الولاية:
-       </span>
-       <span class="detail-value" id="profile-wilaya">
-        الجزائر
-       </span>
-      </div>
-      <div class="detail-row">
-       <span class="detail-label">
-        رقم الهاتف:
-       </span>
-       <span class="detail-value" id="profile-phone">
-        +213123456789
-       </span>
-      </div>
-     </div>
-     <div class="profile-actions">
-      <button class="btn btn-secondary" id="change-profile-pic">
-       تغيير الصورة
-      </button>
-      <button class="btn btn-secondary" id="edit-profile">
-       تعديل الملف
-      </button>
-      <button class="btn btn-primary" id="add-product">
-       إضافة منتج
-      </button>
-     </div>
-    </div>
-   </div>
-  </div>
-  <!-- Add Product Page -->
-  <div id="add-product-page" style="display: none;">
-   <header>
-    <div class="container header-content">
-     <div class="logo">
-      إضافة منتج جديد
-     </div>
-     <div class="header-buttons">
-      <button class="btn-secondary" id="back-to-profile">
-       <span>
-        العودة للملف
-       </span>
-      </button>
-     </div>
-    </div>
-   </header>
-   <div class="container">
-    <div class="form-container">
-     <div class="form-group">
-      <label for="product-name">
-       اسم المنتج
-      </label>
-      <input id="product-name" placeholder="اسم المنتج" required="" type="text"/>
-     </div>
-     <div class="form-group">
-      <label for="product-price">
-       السعر (دج)
-      </label>
-      <input id="product-price" min="0" placeholder="السعر بالدينار الجزائري" required="" type="number"/>
-     </div>
-     <div class="form-group">
-      <label for="product-category">
-       نوع المنتج
-      </label>
-      <select id="product-category" required="">
-       <option value="">
-        اختر النوع
-       </option>
-       <option value="ملابس">
-        ملابس
-       </option>
-       <option value="أجهزة إلكترونية">
-        أجهزة إلكترونية
-       </option>
-       <option value="أثاث">
-        أثاث
-       </option>
-       <option value="كتب">
-        كتب
-       </option>
-       <option value="أدوات منزلية">
-        أدوات منزلية
-       </option>
-       <option value="أخرى">
-        أخرى
-       </option>
-      </select>
-     </div>
-     <div class="form-group">
-      <label for="product-condition">
-       حالة المنتج
-      </label>
-      <select id="product-condition" required="">
-       <option value="">
-        اختر الحالة
-       </option>
-       <option value="جديد">
-        جديد
-       </option>
-       <option value="ممتاز">
-        ممتاز
-       </option>
-       <option value="جيد">
-        جيد
-       </option>
-       <option value="متوسط">
-        متوسط
-       </option>
-       <option value="سيء">
-        سيء
-       </option>
-      </select>
-     </div>
-     <div class="form-group">
-      <label for="product-description">
-       وصف المنتج
-      </label>
-      <textarea id="product-description" placeholder="وصف مفصل عن المنتج" rows="4"></textarea>
-     </div>
-     <div class="form-group">
-      <label for="product-phone">
-       رقم الهاتف
-      </label>
-      <div class="phone-input">
-       <div class="phone-prefix">
-        +213
-       </div>
-       <input class="phone-number" id="product-phone" inputmode="numeric" maxlength="9" minlength="9" pattern="[0-9]{9}" placeholder="رقم الهاتف" required="" type="tel"/>
-      </div>
-     </div>
-     <div class="form-group">
-      <label>
-       صور المنتج (1-4 صور)
-      </label>
-      <div class="image-upload">
-       <input accept="image/*" id="product-image-input" multiple="" required="" style="display: none;" type="file"/>
-       <button class="btn btn-secondary" id="upload-images-btn">
-        اختر الصور
-       </button>
-       <p style="margin-top: 8px; font-size: 0.8rem; color: var(--light-text);">
-        يمكنك رفع ما يصل إلى 4 صور
-       </p>
-       <div class="image-preview" id="image-preview">
-       </div>
-      </div>
-     </div>
-     <div class="form-actions">
-      <button class="btn btn-secondary" id="cancel-add-product">
-       إلغاء
-      </button>
-      <button class="btn btn-primary" id="publish-product">
-       نشر المنتج
-      </button>
-     </div>
-    </div>
-   </div>
-  </div>
-  <!-- Modals -->
-  <div aria-labelledby="delete-modal-title" aria-modal="true" class="modal" id="delete-product-modal" role="dialog">
-   <div class="modal-content">
-    <h2 id="delete-modal-title">
-     تأكيد حذف المنتج
-    </h2>
-    <p>
-     هل أنت متأكد أنك تريد حذف هذا المنتج؟ هذا الإجراء لا يمكن التراجع عنه.
-    </p>
-    <div class="modal-actions">
-     <button class="btn btn-secondary" id="cancel-delete-product">
-      إلغاء
-     </button>
-     <button class="btn btn-danger" id="confirm-delete-product">
-      حذف المنتج
-     </button>
-    </div>
-   </div>
-  </div>
-  <div aria-labelledby="logout-modal-title" aria-modal="true" class="modal" id="logout-modal" role="dialog">
-   <div class="modal-content">
-    <h2 id="logout-modal-title">
-     تأكيد تسجيل الخروج
-    </h2>
-    <p>
-     هل أنت متأكد أنك تريد تسجيل الخروج؟
-    </p>
-    <div class="modal-actions">
-     <button class="btn btn-secondary" id="cancel-logout">
-      إلغاء
-     </button>
-     <button class="btn btn-danger" id="confirm-logout">
-      تسجيل الخروج
-     </button>
-    </div>
-   </div>
-  </div>
-  <div aria-labelledby="edit-profile-title" aria-modal="true" class="modal" id="edit-profile-modal" role="dialog">
-   <div class="modal-content">
-    <h2 id="edit-profile-title">
-     تعديل الملف الشخصي
-    </h2>
-    <div class="form-group">
-     <label for="edit-full-name">
-      الاسم الكامل
-     </label>
-     <input id="edit-full-name" placeholder="الاسم الكامل" required="" type="text"/>
-    </div>
-    <div class="form-group">
-     <label for="edit-email">
-      البريد الإلكتروني
-     </label>
-     <input id="edit-email" placeholder="البريد الإلكتروني" required="" type="email"/>
-    </div>
-    <div class="form-group">
-     <label for="edit-age">
-      العمر
-     </label>
-     <input id="edit-age" max="100" min="16" placeholder="العمر" required="" type="number"/>
-    </div>
-    <div class="form-group">
-     <label for="edit-wilaya">
-      الولاية
-     </label>
-     <select id="edit-wilaya" required="">
-      <option value="">
-       اختر الولاية
-      </option>
-      <!-- قائمة الولايات -->
-     </select>
-    </div>
-    <div class="form-group">
-     <label for="edit-phone">
-      رقم الهاتف
-     </label>
-     <div class="phone-input">
-      <div class="phone-prefix">
-       +213
-      </div>
-      <input class="phone-number" id="edit-phone" inputmode="numeric" maxlength="9" minlength="9" pattern="[0-9]{9}" placeholder="رقم الهاتف" required="" type="tel"/>
-     </div>
-    </div>
-    <div class="modal-actions">
-     <button class="btn btn-secondary" id="cancel-edit-profile">
-      إلغاء
-     </button>
-     <button class="btn btn-primary" id="save-profile">
-      حفظ التغييرات
-     </button>
-    </div>
-   </div>
-  </div>
-  <div aria-labelledby="change-pic-title" aria-modal="true" class="modal" id="change-pic-modal" role="dialog">
-   <div class="modal-content">
-    <h2 id="change-pic-title">
-     تغيير صورة الملف الشخصي
-    </h2>
-    <div class="image-upload">
-     <input accept="image/*" id="new-profile-pic" style="display: none;" type="file"/>
-     <button class="btn btn-secondary" id="upload-profile-pic-btn">
-      اختر صورة
-     </button>
-     <div class="image-preview" id="profile-pic-preview">
-     </div>
-    </div>
-    <div class="modal-actions">
-     <button class="btn btn-secondary" id="cancel-change-pic">
-      إلغاء
-     </button>
-     <button class="btn btn-primary" id="confirm-change-pic">
-      حفظ الصورة
-     </button>
-    </div>
-   </div>
-  </div>
-  <div aria-modal="true" class="image-viewer-modal" id="image-viewer-modal" role="dialog">
-   <div class="image-viewer-content">
-    <button aria-label="إغلاق" class="image-viewer-close">
-     ×
-    </button>
-    <img alt="" class="image-viewer-img" id="viewer-main-image" src=""/>
-    <div class="image-viewer-nav">
-     <button aria-label="الصورة السابقة" id="prev-image">
-      &lt;
-     </button>
-     <button aria-label="الصورة التالية" id="next-image">
-      &gt;
-     </button>
-    </div>
-    <div class="image-viewer-thumbnails" id="image-thumbnails">
-    </div>
-   </div>
-  </div>
-  <!-- Notification -->
-  <div aria-live="assertive" class="notification" id="notification" role="alert">
-   <span id="notification-message">
-   </span>
-  </div>
-  <!-- Notifications Panel -->
-  <div aria-label="قائمة الإشعارات" class="notifications-panel" id="notifications-panel" role="region">
-   <!-- الإشعارات ستظهر هنا -->
-  </div>
-  <footer style="text-align:center; font-size: 12px; color: gray; padding: 10px; margin-top: 20px;">
-   باستخدامك لهذا الموقع، فإنك توافق على
-   <a href="#" style="color: gray;">
-    شروط الاستخدام
-   </a>
-   و
-   <a href="#" style="color: gray;">
-    سياسة الخصوصية
-   </a>
-   .
-  </footer>
-  <script src="scripts.js">
-  </script>
- <script src="scripts.js"></script>
+
+    <footer style="text-align:center; font-size: 12px; color: gray; padding: 10px; margin-top: 20px;">
+        باستخدامك لهذا الموقع، فإنك توافق على
+        <a href="#" style="color: gray;">شروط الاستخدام</a>
+        و
+        <a href="#" style="color: gray;">سياسة الخصوصية</a>
+        .
+    </footer>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
