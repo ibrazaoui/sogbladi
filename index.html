@@ -1564,29 +1564,21 @@
         // تهيئة التطبيق
         document.addEventListener('DOMContentLoaded', initializeApp);
         
+       
+
+
         async function initializeApp() {
             setupEventListeners();
             setupOTPInputs();
             setupAutoDeleteOldProducts();
-            setupServiceWorker();
             await checkAuthState();
             startSessionCheck();
             setupResetPasswordPage();
+            
             if (window.location.hash.includes('#reset-password')) {
                 await handlePasswordResetRedirect();
-        
-            // في initializeApp()
-           window.addEventListener('load', () => {
-    const hash = window.location.hash;
-    if (hash.includes('error=access_denied')) {
-        showNotification("رابط الاستعادة غير صالح أو منتهي الصلاحية", "error");
-        window.location.hash = '#login';
     }
-});
 }
-
-
-        }
         
         function setupEventListeners() {
             // أحداث المصادقة
@@ -1643,18 +1635,6 @@
             
             // أحداث أخرى
             document.addEventListener('visibilitychange', handleVisibilityChange);
-        }
-        
-        function setupServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful');
-                    })
-                    .catch(err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
-            }
         }
         
         function startSessionCheck() {
@@ -2016,12 +1996,20 @@
     try {
         toggleButtonLoading(forgotPasswordBtn, true);
         
+        // تحقق من آخر وقت تم فيه إرسال طلب
+        const lastSent = localStorage.getItem('lastPasswordResetSent');
+        if (lastSent && (Date.now() - parseInt(lastSent)) < 60000) {
+            showNotification("الرجاء الانتظار دقيقة قبل إعادة المحاولة", "error");
+            return;
+        }
+
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: window.location.origin + '/sogbladi/#reset-password'
+            redirectTo: window.location.origin + window.location.pathname + '#reset-password'
         });
 
         if (error) throw error;
         
+        localStorage.setItem('lastPasswordResetSent', Date.now());
         showNotification("تم إرسال رابط الاستعادة إلى بريدك (تحقق من صندوق spam)", "success");
     } catch (error) {
         console.error("Error sending reset link:", error);
@@ -2030,7 +2018,20 @@
         toggleButtonLoading(forgotPasswordBtn, false);
     }
 }
-
+        
+        function setupResetPasswordPage() {
+    if (window.location.hash === '#reset-password') {
+        handlePasswordResetRedirect();
+    }
+    
+    document.getElementById('cancel-reset-password').addEventListener('click', () => {
+        window.location.hash = '';
+        togglePages(document.getElementById('reset-password-page'), loginPage);
+    });
+    
+    document.getElementById('submit-reset-password').addEventListener('click', handlePasswordReset);
+}
+        
         async function handlePasswordResetRedirect() {
     try {
         const { data, error } = await supabase.auth.getSession();
@@ -2788,19 +2789,6 @@
                 console.error("خطأ في البحث:", error);
                 showNotification("خطأ في البحث: " + error.message, "error");
             }
-        }
-        
-        function convertFrenchToArabic(text) {
-            const replacements = {
-                'a': 'ا', 'b': 'ب', 'c': 'س', 'd': 'د', 'e': 'ي',
-                'f': 'ف', 'g': 'ج', 'h': 'ه', 'i': 'ي', 'j': 'ج',
-                'k': 'ك', 'l': 'ل', 'm': 'م', 'n': 'ن', 'o': 'و',
-                'p': 'ب', 'q': 'ق', 'r': 'ر', 's': 'س', 't': 'ت',
-                'u': 'و', 'v': 'ف', 'w': 'و', 'x': 'كس', 'y': 'ي',
-                'z': 'ز'
-            };
-            
-            return text.toLowerCase().split('').map(char => replacements[char] || char).join('');
         }
         
         function showAddProductPage() {
