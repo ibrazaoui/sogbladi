@@ -281,7 +281,6 @@
                 const { data, error } = await supabase.auth.signInWithPassword({
                     email: email,
                     password: password
-                });
                 
                 if (error) {
                     if (error.message.includes('Invalid login credentials')) {
@@ -413,7 +412,6 @@
                             phone: `+213${phone}`
                         }
                     }
-                });
 
                 if (error) throw error;
                 
@@ -444,7 +442,6 @@
                     email: otpEmail,
                     token: otpCode,
                     type: 'email'
-                });
 
                 if (error) throw error;
                 
@@ -479,7 +476,6 @@
                 const { error } = await supabase.auth.resend({
                     type: 'signup',
                     email: otpEmail
-                });
                 
                 if (error) throw error;
                 
@@ -512,7 +508,6 @@
 
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
             redirectTo: window.location.origin + window.location.pathname + '#reset-password'
-        });
 
         if (error) throw error;
         
@@ -534,7 +529,6 @@
     document.getElementById('cancel-reset-password').addEventListener('click', () => {
         window.location.hash = '';
         togglePages(document.getElementById('reset-password-page'), loginPage);
-    });
     
     document.getElementById('submit-reset-password').addEventListener('click', handlePasswordReset);
 }
@@ -586,7 +580,6 @@
         // تحديث كلمة المرور
         const { error: updateError } = await supabase.auth.updateUser({
             password: newPassword
-        });
         if (updateError) throw updateError;
         
         showNotification("تم تحديث كلمة المرور بنجاح", "success");
@@ -792,7 +785,6 @@
                         }
                     }).catch(() => {
                         setInitialsFallback(profilePic, headerPic);
-                    });
                 }
             } else {
                 setInitialsFallback(profilePic, headerPic);
@@ -825,7 +817,6 @@
                 el.style.fontWeight = 'bold';
                 el.style.fontSize = (el === document.getElementById('profile-picture') ? '40px' : '14px');
                 el.style.color = '#666';
-            });
         }
         
         async function getSignedProfilePicUrl(path) {
@@ -896,7 +887,6 @@
                         cacheControl: '3600',
                         contentType: file.type,
                         upsert: true
-                    });
 
                 if (uploadError) throw uploadError;
 
@@ -1111,13 +1101,11 @@
                         }
                         openImageViewer(product.signed_image_urls);
                     }
-                });
                 
                 const likeBtn = productCard.querySelector('.like-btn');
                 likeBtn.addEventListener('click', async (e) => {
                     e.stopPropagation();
                     await handleLikeProduct(product.id, likeBtn);
-                });
                 
                 if (isOwner) {
                     const deleteBtn = productCard.querySelector('.delete-product-btn');
@@ -1125,11 +1113,9 @@
                         e.stopPropagation();
                         productToDelete = product.id;
                         showModal(deleteProductModal);
-                    });
                 }
                 
                 container.appendChild(productCard);
-            });
         }
         
         async function handleLikeProduct(productId, likeBtn) {
@@ -1226,7 +1212,6 @@
                         related_product_id: product.id,
                         is_read: false,
                         created_at: new Date().toISOString()
-                    });
 
                 if (!error) {
                     playNotificationSound();
@@ -1241,7 +1226,6 @@
             try {
                 const { error } = await supabase.rpc('increment_views', {
                     product_id: productId
-                });
                 
                 if (error) throw error;
                 
@@ -1371,14 +1355,12 @@
                         const dataTransfer = new DataTransfer();
                         newFiles.forEach(file => dataTransfer.items.add(file));
                         document.getElementById('product-image-input').files = dataTransfer.files;
-                    });
                     
                     imgContainer.appendChild(img);
                     imgContainer.appendChild(removeBtn);
                     preview.appendChild(imgContainer);
                 };
                 reader.readAsDataURL(file);
-            });
         }
         
         async function handlePublishProduct() {
@@ -1415,7 +1397,6 @@
                             cacheControl: '3600',
                             contentType: file.type,
                             upsert: false
-                        });
                     
                     if (uploadError) throw uploadError;
                     imagePaths.push(filePath);
@@ -1588,7 +1569,6 @@
                 notifications.unshift({
                     ...payload.new,
                     productInfo: productInfo
-                });
                 
                 if (notifications.length > 10) {
                     notifications.pop();
@@ -1667,11 +1647,9 @@
                         showStorePage();
                         panel.style.display = 'none';
                         markNotificationAsRead(notif.id);
-                    });
                 }
                 
                 panel.appendChild(item);
-            });
         }
         
         async function markNotificationAsRead(notificationId) {
@@ -1764,10 +1742,8 @@
                 thumb.addEventListener('click', () => {
                     currentImageIndex = index;
                     updateImageViewer();
-                });
 
                 imageThumbnails.appendChild(thumb);
-            });
 
             showModal(imageViewerModal);
         }
@@ -1783,7 +1759,6 @@
                     } else {
                         thumb.classList.remove('active');
                     }
-                });
             }
         }
         
@@ -1825,7 +1800,6 @@
         function showStorePage() {
             [loginPage, otpPage, registerPage, profilePage, addProductPage].forEach(page => {
                 page.style.display = 'none';
-            });
             storePage.style.display = 'block';
             renderProducts();
             window.scrollTo(0, 0);
@@ -1834,7 +1808,6 @@
         function showLoginPage() {
             [storePage, otpPage, registerPage, profilePage, addProductPage].forEach(page => {
                 page.style.display = 'none';
-            });
             loginPage.style.display = 'block';
             window.scrollTo(0, 0);
         }
@@ -1914,21 +1887,17 @@
                         if (pasteData.length === 6 && /^\d+$/.test(pasteData)) {
                             otpInputs.forEach((input, i) => {
                                 input.value = pasteData[i] || '';
-                            });
                             otpInputs[5].focus();
                             e.preventDefault();
                         }
                     } else if (input.value.length === 1 && index < otpInputs.length - 1) {
                         otpInputs[index + 1].focus();
                     }
-                });
                 
                 input.addEventListener('keydown', (e) => {
                     if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {
                         otpInputs[index - 1].focus();
                     }
-                });
-            });
         }
         
         function escapeHtml(unsafe) {
@@ -1955,9 +1924,7 @@
             } catch (error) {
                 console.error('Error cleaning up notifications:', error);
             }
-        });
     
-
 
 
 
