@@ -27,6 +27,7 @@ let lastSeenProductId = null;
 let notificationChannel = null;
 let hasShownWelcome = false;
 let sessionCheckInterval = null;
+let viewedProducts = [];
 
 // عناصر DOM
 const loginPage = document.getElementById('login-page');
@@ -209,7 +210,6 @@ async function handleAuthStateChange(event, session) {
             }
         } catch (error) {
             console.error("خطأ في تحميل البيانات:", error);
-            showNotification("حدث خطأ أثناء تحميل البيانات", "error");
         }
     } else if (event === 'SIGNED_OUT') {
         currentUser = null;
@@ -283,7 +283,6 @@ async function handleLogin() {
             await loadProducts();
             await loadNotifications();
             showStorePage();
-            showNotification("تم تسجيل الدخول بنجاح", "success");
             
             welcomeMessage.style.display = 'block';
             setTimeout(() => {
@@ -506,7 +505,6 @@ async function handleLogout() {
         hasShownWelcome = false;
         clearInterval(sessionCheckInterval);
         showLoginPage();
-        showNotification("تم تسجيل الخروج بنجاح", "success");
     } catch (error) {
         console.error("خطأ في تسجيل الخروج:", error);
         showNotification("خطأ في تسجيل الخروج: " + error.message, "error");
@@ -990,7 +988,8 @@ function renderProducts() {
         productImage.addEventListener('click', async () => {
             if (product.signed_image_urls?.length) {
                 lastSeenProductId = product.id;
-                if (!isOwner) {
+                if (!isOwner && !viewedProducts.includes(product.id)) {
+                    viewedProducts.push(product.id);
                     await increaseProductViews(product.id);
                 }
                 openImageViewer(product.signed_image_urls);
@@ -1112,7 +1111,10 @@ async function sendLikeNotification(product) {
             });
 
         if (!error) {
-            playNotificationSound();
+            // تشغيل الصوت فقط لمالك المنتج
+            if (currentUser.id !== product.user_id) {
+                playNotificationSound();
+            }
             showBrowserNotification("إعجاب جديد", message);
         }
     } catch (error) {
@@ -1286,6 +1288,22 @@ async function handlePublishProduct() {
     try {
         toggleButtonLoading(publishProductBtn, true);
         
+        // التحقق من عدد المنشورات في آخر 24 ساعة
+        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+        
+        const { count: productsCount, error: countError } = await supabase
+            .from('products')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', currentUser.id)
+            .gte('created_at', twentyFourHoursAgo);
+        
+        if (countError) throw countError;
+        
+        if (productsCount >= 4) {
+            showNotification("لقد تجاوزت 4 منشورات في اليوم ⏳ انتظر مدة 24 ساعة، ولكن يمكنك تصفح متجرنا لترى ما يناسبك من منتجات 😊", "error");
+            return;
+        }
+        
         for (let file of files) {
             const ext = file.name.split('.').pop();
             const fileName = `${currentUser.id}_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${ext}`;
@@ -1322,8 +1340,6 @@ async function handlePublishProduct() {
         
         if (insertError) throw insertError;
         
-        await sendNewProductNotification(productName, data[0].id);
-        
         showNotification("تم نشر المنتج بنجاح", "success");
         resetProductForm();
         await loadProducts();
@@ -1341,37 +1357,6 @@ async function handlePublishProduct() {
         showNotification("خطأ في نشر المنتج: " + (error.message || "تأكد من صحة البيانات"), "error");
     } finally {
         toggleButtonLoading(publishProductBtn, false);
-    }
-}
-
-async function sendNewProductNotification(productName, productId) {
-    try {
-        const { data: users, error } = await supabase
-            .from('profiles')
-            .select('id')
-            .neq('id', currentUser.id);
-        
-        if (error) throw error;
-        
-        if (users?.length > 0) {
-            const notifications = users.map(user => ({
-                user_id: user.id,
-                message: `📦 ${currentUser.full_name} نشر منتج جديد: "${productName}"`,
-                related_product_id: productId,
-                is_read: false,
-                created_at: new Date().toISOString()
-            }));
-            
-            const { error: insertError } = await supabase
-                .from('notifications')
-                .insert(notifications);
-            
-            if (!insertError) {
-                playNotificationSound();
-            }
-        }
-    } catch (error) {
-        console.error("خطأ في إرسال الإشعارات:", error);
     }
 }
 
@@ -1478,7 +1463,6 @@ async function handleNewNotification(payload) {
         updateNotificationBadge();
         
         if (document.visibilityState === 'visible') {
-            showNotification(`${payload.new.message}${productInfo}`, "info");
             playNotificationSound();
         } else {
             showBrowserNotification("إشعار جديد", `${payload.new.message}${productInfo}`);
@@ -1492,10 +1476,13 @@ async function loadNotifications() {
     if (!currentUser) return;
     
     try {
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        
         const { data: notificationsData, error } = await supabase
             .from('notifications')
             .select('id, message, created_at, is_read, related_product_id')
             .eq('user_id', currentUser.id)
+            .gte('created_at', sevenDaysAgo)
             .order('created_at', { ascending: false })
             .limit(10);
             
@@ -1821,13 +1808,12 @@ function escapeHtml(unsafe) {
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const oneMonthAgo = new Date();
-        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
         
         await supabase
             .from('notifications')
             .delete()
-            .lt('created_at', oneMonthAgo.toISOString());
+            .lt('created_at', oneWeekAgo);
             
         console.log('Old notifications cleaned up');
     } catch (error) {
